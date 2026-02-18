@@ -7,12 +7,15 @@ export default function Footer() {
   
   const [time, setTime] = useState<string>("Cargando...");
   const [temp, setTemp] = useState<string>("--°C");
-  const [locationName, setLocationName] = useState<string>("Ubicando...");
+  // 1. Fijamos tu ubicación real directamente
+  const [locationName] = useState<string>("Tizayuca, MX");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
+      // 2. Forzamos la zona horaria a México, sin importar de dónde nos visiten
       const formatter = new Intl.DateTimeFormat('es-MX', {
+        timeZone: 'America/Mexico_City',
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit',
@@ -23,18 +26,11 @@ export default function Footer() {
 
     const mountTimer = setTimeout(() => setMounted(true), 0);
 
-    const fetchLocalData = async () => {
+    const fetchWeather = async () => {
       try {
-        const locRes = await fetch("https://ipapi.co/json/");
-        const locData = await locRes.json();
-        if (locData.error) throw new Error("Límite de API");
-
-        const city = locData.city || "Local";
-        const country = locData.country || "";
-        setLocationName(`${city}${country ? `, ${country}` : ""}`);
-
-        const lat = locData.latitude;
-        const lon = locData.longitude;
+        // 3. Coordenadas exactas de Tizayuca, Hidalgo (NUNCA fallará porque no rastrea IPs)
+        const lat = 19.8392;
+        const lon = -98.9811;
 
         const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
         const weatherData = await weatherRes.json();
@@ -43,12 +39,11 @@ export default function Footer() {
           setTemp(`${Math.round(weatherData.current_weather.temperature)}°C`);
         }
       } catch (error) {
-        setLocationName("Ubicación Local");
         setTemp("N/A");
       }
     };
 
-    fetchLocalData();
+    fetchWeather();
 
     return () => {
       clearInterval(timer);
@@ -57,7 +52,6 @@ export default function Footer() {
   }, []);
 
   return (
-    // 1. PADDING REDUCIDO: Cambié pt-32 a pt-16 (la mitad de espacio arriba) y pb-8 (menos espacio abajo)
     <footer className="w-full bg-foreground/[0.02] dark:bg-foreground/[0.01] pt-16 pb-8 px-6 border-t border-foreground/10 transition-colors duration-500 overflow-hidden relative">
       
       {/* Luz ambiental sutil */}
@@ -66,7 +60,6 @@ export default function Footer() {
 
       <div className="max-w-7xl mx-auto w-full flex flex-col items-center relative z-10">
         
-        {/* 2. MÁRGENES REDUCIDOS: El bloque central ya no tiene mb-24, ahora es mb-12 */}
         <div className="flex flex-col items-center text-center w-full max-w-4xl mb-12">
           
           <p className="text-[9px] md:text-[10px] uppercase tracking-[0.4em] text-foreground/50 font-bold mb-4">
@@ -77,14 +70,12 @@ export default function Footer() {
             href="/contacto" 
             className="group relative inline-block mb-8"
           >
-            {/* 3. TÍTULO MÁS CHICO: Bajó de text-[8rem] a text-[5.5rem] en PC, mucho más manejable */}
             <h2 className="text-5xl md:text-7xl lg:text-[5.5rem] font-black tracking-tighter uppercase text-foreground leading-[0.9] hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-500 transition-all duration-500">
               HABLEMOS.
             </h2>
             <div className="absolute -bottom-2 left-0 w-0 h-1 bg-blue-500 group-hover:w-full transition-all duration-500 ease-out" />
           </Link>
 
-          {/* 4. PASTILLA MÁS FINA: Reduje padding interno (py-2.5 px-5), achiqué íconos (12px) y texto (text-[9px]) */}
           <div className="flex flex-wrap items-center justify-center gap-3 md:gap-5 px-5 py-2.5 rounded-full bg-background border border-foreground/10 shadow-md shadow-foreground/5">
             
             <div className="flex items-center gap-2 pr-3 md:pr-5 border-r border-foreground/10">
@@ -115,7 +106,6 @@ export default function Footer() {
                     <circle cx="12" cy="12" r="10"></circle>
                     <polyline points="12 6 12 12 16 14"></polyline>
                   </svg>
-                  {/* Contenedor del reloj ligeramente más angosto para que no sobre espacio */}
                   <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-foreground/80 tabular-nums w-[75px] text-left">
                     {time}
                   </span>
@@ -125,7 +115,6 @@ export default function Footer() {
           </div>
         </div>
         
-        {/* PARTE INFERIOR: Más pegada hacia arriba (pt-6 en vez de pt-8) */}
         <div className="w-full flex flex-col md:flex-row justify-between items-center gap-6 pt-6 border-t border-foreground/10">
           
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-background border border-foreground/10 shadow-sm order-2 md:order-1">
