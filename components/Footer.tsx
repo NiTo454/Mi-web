@@ -134,7 +134,7 @@ export default function Footer() {
         <div className="flex flex-col items-center text-center w-full max-w-7xl mb-12">
           
           <p className="text-[9px] md:text-[10px] uppercase tracking-[0.4em] text-foreground/50 font-bold mb-4">
-            ¿Comenzamos a construir?
+            ¿Listo para el siguiente nivel?
           </p>
           
           {/* EL BOTÓN QUE EXPANDE EL FORMULARIO */}
@@ -144,7 +144,7 @@ export default function Footer() {
             className="group relative inline-block mb-4 outline-none transition-transform active:scale-95"
           >
             <h2 className="text-5xl md:text-7xl lg:text-[5.5rem] font-black tracking-tighter uppercase text-foreground leading-[0.9] hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-500 transition-all duration-500">
-              HABLEMOS.
+              INICIEMOS.
             </h2>
             <div className="absolute -bottom-2 left-0 w-0 h-1 bg-blue-500 group-hover:w-full transition-all duration-500 ease-out" />
           </button>
