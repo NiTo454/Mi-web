@@ -18,7 +18,6 @@ export default function Navbar() {
     { name: "Inicio", path: "/" },
     { name: "Sobre Mí", path: "/sobre-mi" },
     { name: "Proyectos", path: "/proyectos" },
-    { name: "Contacto", path: "/contacto" },
   ];
 
   return (
