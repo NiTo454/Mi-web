@@ -3,15 +3,21 @@
 @layer base {
   :root {
     --background: #ffffff;
-    --foreground: #09090b; /* Zinc 950 */
-    --accent: #3b82f6;
+    --foreground: #000000; /* Negro Profundo */
+    --accent: #E61C8C; /* Fucsia Vibrante */
+
+    /* Paleta Oficial Syntaxis Lab */
+    --brand-fucsia: #E61C8C;
+    --brand-violeta: #A3249E;
+    --brand-naranja: #FF5C33;
+    --brand-negro: #000000;
   }
 
   /* Usamos .dark para compatibilidad con Next-Themes o selectores estándar */
   .dark {
-    --background: #09090b;
-    --foreground: #fafafa; /* Zinc 50 */
-    --accent: #60a5fa;
+    --background: #000000; /* Negro Profundo */
+    --foreground: #ffffff;
+    --accent: #FF5C33; /* Naranja Coral en modo oscuro */
   }
 
   body {
@@ -30,7 +36,7 @@
   .text-stroke-white {
     -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.4);
   }
-  
+
   .text-stroke-black {
     -webkit-text-stroke: 1.5px rgba(0, 0, 0, 0.4);
   }
@@ -53,6 +59,16 @@
     background-image: url("https://grainy-gradients.vercel.app/noise.svg");
     filter: contrast(120%) brightness(100%);
   }
+}
+
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+
+@keyframes terminal-load {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(100%); }
+  100% { transform: translateX(100%); }
 }
 
 /* Animación global de entrada (opcional) */

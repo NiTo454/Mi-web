@@ -32,10 +32,10 @@ export default function Navbar() {
       isScrolled ? "bg-background/90 backdrop-blur-md border-b border-foreground/10 py-4" : "bg-transparent py-8"
     }`}>
       <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
-        
+
         {/* LOGO */}
-        <Link 
-          href="/" 
+        <Link
+          href="/"
           onClick={(e) => {
             // Limpiamos el hash manualmente y disparamos el evento
             setActiveHash("");
@@ -44,8 +44,8 @@ export default function Navbar() {
           }}
           className="flex items-center gap-2 group flex-shrink-0"
         >
-          <span className="text-sm md:text-base font-black tracking-tighter uppercase text-foreground transition-colors">NHM</span>
-          <span className="h-2 w-2 rounded-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
+          <span className="text-sm md:text-base font-black tracking-tighter uppercase text-foreground transition-colors group-hover:text-[#E61C8C]">NHM</span>
+          <span className="h-2 w-2 rounded-full bg-[#FF5C33] shadow-[0_0_10px_rgba(255,92,51,0.5)] transition-transform duration-300 group-hover:scale-110" />
         </Link>
 
         {/* ENLACES */}
@@ -53,8 +53,8 @@ export default function Navbar() {
           {links.map((link) => {
             const isActive = activeHash === link.hash;
             return (
-              <Link 
-                key={link.name} 
+              <Link
+                key={link.name}
                 href={link.href}
                 onClick={(e) => {
                   // AQUÍ ESTÁ LA MAGIA: Forzamos a que el navegador se entere del cambio
@@ -74,7 +74,11 @@ export default function Navbar() {
                   {link.name}
                 </span>
                 {isActive && (
-                  <motion.div layoutId="nav-underline" className="absolute -bottom-1 left-0 w-full h-[2px] bg-blue-500" transition={{ type: "spring", stiffness: 380, damping: 30 }} />
+                  <motion.div
+                    layoutId="nav-underline"
+                    className="absolute -bottom-1 left-0 w-full h-[2px] bg-gradient-to-r from-[#E61C8C] to-[#FF5C33]"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
                 )}
               </Link>
             );
