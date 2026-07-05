@@ -38,6 +38,7 @@ const BackendIcon = () => (
 );
 
 // --- DATOS ---
+// --- DATOS ---
 const areas: Area[] = [
   {
     title: "Apps Móviles",
@@ -65,44 +66,157 @@ const areas: Area[] = [
   }
 ];
 
+type Project = {
+  title: string;
+  role: string;
+  desc: string;
+  tech: string[];
+  github?: string;
+  demo?: string;
+};
+
+const realProjects: Project[] = [
+  {
+    title: "App Móvil de Gestión Clínica",
+    role: "Desarrollador Mobile Principal",
+    desc: "Aplicación móvil multiplataforma de salud. Cuenta con agendamiento de citas en tiempo real, chat integrado médico-paciente y visualización de expedientes médicos.",
+    tech: ["Flutter", "Dart", "Firebase", "Push Notifications"],
+    github: "https://github.com/NiTo454",
+  },
+  {
+    title: "Plataforma Escolar con Asistencia QR",
+    role: "Desarrollador Full-Stack",
+    desc: "Sistema académico web con control de asistencia mediante códigos QR dinámicos auto-actualizables para evitar fraudes, panel de administración docente y control escolar.",
+    tech: ["Next.js", "Node.js", "MySQL", "Tailwind CSS"],
+    github: "https://github.com/NiTo454",
+  },
+  {
+    title: "Sitio Corporativo con Simulaciones 3D",
+    role: "Frontend & UI Developer",
+    desc: "Desarrollo de landing page interactiva corporativa, implementando simulaciones de partículas 3D aceleradas por hardware y layouts responsivos de alta fidelidad.",
+    tech: ["Next.js", "React Three Fiber", "Three.js", "Framer Motion"],
+    demo: "https://sintaxis-lab-xuse.vercel.app",
+  }
+];
+
 export default function ProjectsSection() {
   return (
-    <motion.div variants={containerVariants} initial="hidden" animate="visible" className="pt-8 pb-16 border-t border-foreground/10">
-      <div className="mb-12">
-        <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-foreground uppercase">LO QUE <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#E61C8C] to-[#A3249E]">CONSTRUYO.</span></h2>
+    <motion.div variants={containerVariants} initial="hidden" animate="visible" className="pt-12 pb-16 border-t border-foreground/10 flex flex-col gap-16">
+      
+      {/* AREAS DE EXPERTISE */}
+      <div>
+        <div className="mb-12">
+          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-naranja">Especialidad</span>
+          <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-foreground uppercase mt-2">
+            LO QUE <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-fucsia to-brand-violeta">CONSTRUYO.</span>
+          </h2>
+        </div>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {areas.map((area) => (
+            <motion.div key={area.title} variants={fadeInUp} className="h-full">
+              <Link
+                href={area.link}
+                className="group relative flex flex-col justify-between h-full bg-background/30 dark:bg-foreground/[0.01] backdrop-blur-md border border-foreground/10 hover:border-brand-fucsia/30 hover:bg-background/50 dark:hover:bg-foreground/[0.03] p-8 md:p-10 rounded-[2.5rem] hover:-translate-y-2 transition-all duration-500 shadow-md hover:shadow-[0_20px_50px_-12px_rgba(230,28,140,0.15)] overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-brand-fucsia/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+                <div className="relative z-10">
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="flex flex-col gap-3">
+                      <div className="text-foreground/80 bg-foreground/5 p-3 rounded-2xl w-fit transition-transform duration-300 group-hover:scale-110">
+                        {area.icon}
+                      </div>
+                      <span className="text-[10px] font-black uppercase tracking-[0.3em] text-foreground/40 mt-1">{area.category}</span>
+                    </div>
+                    <div className="w-10 h-10 rounded-full border border-foreground/10 flex items-center justify-center group-hover:bg-brand-fucsia group-hover:border-brand-fucsia group-hover:text-white group-hover:rotate-45 transition-all duration-300 text-foreground" aria-hidden="true">↗</div>
+                  </div>
+                  <h3 className="text-3xl font-black tracking-tight text-foreground mb-4">{area.title}</h3>
+                  <p className="text-foreground/60 text-sm leading-relaxed mb-10 group-hover:text-foreground/80 transition-colors duration-300">{area.desc}</p>
+                </div>
+                <div className="relative z-10 flex flex-wrap gap-2 mt-auto">
+                  {area.tech.map(t => (
+                    <span key={t} className="text-[9px] font-bold uppercase tracking-widest px-4 py-2 bg-background/50 dark:bg-foreground/5 text-foreground/70 rounded-full border border-foreground/10 group-hover:border-brand-violeta/40 group-hover:text-brand-fucsia transition-colors duration-300">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </Link>
+            </motion.div>
+          ))}
+        </div>
       </div>
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {areas.map((area) => (
-          <motion.div key={area.title} variants={fadeInUp} className="h-full">
-            <Link
-              href={area.link}
-              className="group relative flex flex-col justify-between h-full bg-foreground/[0.02] border border-foreground/10 hover:border-[#E61C8C]/40 hover:bg-foreground/[0.05] p-8 md:p-10 rounded-[2.5rem] hover:-translate-y-2 transition-all duration-500 shadow-lg hover:shadow-[0_10px_40px_-10px_rgba(230,28,140,0.3)] overflow-hidden"
+
+      {/* GALERÍA DE PROYECTOS REALES */}
+      <div className="pt-12 border-t border-foreground/5">
+        <div className="mb-12">
+          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-naranja">Portafolio</span>
+          <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-foreground uppercase mt-2">
+            PROYECTOS <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-fucsia to-brand-violeta">DESTACADOS.</span>
+          </h2>
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {realProjects.map((project) => (
+            <motion.div
+              key={project.title}
+              variants={fadeInUp}
+              className="group relative bg-background/25 dark:bg-foreground/[0.005] backdrop-blur-md border border-foreground/10 hover:border-brand-violeta/30 hover:bg-background/40 dark:hover:bg-foreground/[0.02] p-8 md:p-10 rounded-[2.5rem] transition-all duration-500 shadow-sm hover:shadow-[0_20px_50px_-12px_rgba(163,36,158,0.15)] flex flex-col justify-between overflow-hidden"
             >
-              {/* Brillo interior en hover */}
-              <div className="absolute inset-0 bg-gradient-to-br from-[#E61C8C]/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-br from-brand-violeta/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
               <div className="relative z-10">
                 <div className="flex justify-between items-start mb-6">
-                  <div className="flex flex-col gap-2">
-                    <div className="text-foreground/80">{area.icon}</div>
-                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-foreground/50">{area.category}</span>
+                  <div className="flex flex-col gap-1">
+                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-brand-fucsia">{project.role}</span>
+                    <h3 className="text-2xl md:text-3xl font-black tracking-tight text-foreground mt-1">{project.title}</h3>
                   </div>
-                  <div className="w-10 h-10 rounded-full border border-foreground/10 flex items-center justify-center group-hover:bg-[#E61C8C] group-hover:border-[#E61C8C] group-hover:text-white transition-colors duration-300" aria-hidden="true">↗</div>
+
+                  <div className="flex gap-2">
+                    {project.github && (
+                      <a
+                        href={project.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-10 h-10 rounded-full border border-foreground/10 flex items-center justify-center hover:bg-foreground hover:text-background transition-colors duration-300 text-foreground"
+                        title="Ver Código en GitHub"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"/>
+                        </svg>
+                      </a>
+                    )}
+                    {project.demo && (
+                      <a
+                        href={project.demo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-10 h-10 rounded-full border border-foreground/10 flex items-center justify-center hover:bg-brand-fucsia hover:border-brand-fucsia hover:text-white transition-all duration-300 text-foreground"
+                        title="Ver Sitio Web"
+                      >
+                        ↗
+                      </a>
+                    )}
+                  </div>
                 </div>
-                <h3 className="text-3xl font-black tracking-tight text-foreground mb-4">{area.title}</h3>
-                <p className="text-foreground/60 text-sm leading-relaxed mb-10 group-hover:text-foreground/80 transition-colors duration-300">{area.desc}</p>
+
+                <p className="text-foreground/60 text-sm leading-relaxed mb-8">{project.desc}</p>
               </div>
-              <div className="relative z-10 flex flex-wrap gap-2 mt-auto">
-                {area.tech.map(t => (
-                  <span key={t} className="text-[9px] font-bold uppercase tracking-widest px-4 py-2 bg-foreground/5 text-foreground/70 rounded-full border border-foreground/10 group-hover:border-[#A3249E]/40 group-hover:text-[#E61C8C] transition-colors duration-300">
+
+              <div className="relative z-10 flex flex-wrap gap-1.5 mt-auto">
+                {project.tech.map((t) => (
+                  <span
+                    key={t}
+                    className="text-[9px] font-bold uppercase tracking-widest px-3 py-1.5 bg-background/50 dark:bg-foreground/5 text-foreground/60 rounded-lg border border-foreground/5"
+                  >
                     {t}
                   </span>
                 ))}
               </div>
-            </Link>
-          </motion.div>
-        ))}
+            </motion.div>
+          ))}
+        </div>
       </div>
+
     </motion.div>
   );
 }

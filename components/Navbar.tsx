@@ -28,28 +28,29 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-300 ${
-      isScrolled ? "bg-background/90 backdrop-blur-md border-b border-foreground/10 py-4" : "bg-transparent py-8"
-    }`}>
-      <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
+    <header className="fixed top-0 left-0 w-full z-[100] p-4 transition-all duration-500">
+      <div className={`mx-auto flex justify-between items-center transition-all duration-500 px-6 md:px-8 ${
+        isScrolled 
+          ? "max-w-3xl bg-background/85 backdrop-blur-md border border-foreground/15 py-3 rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.08)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.4)]" 
+          : "max-w-7xl bg-transparent py-4"
+      }`}>
 
         {/* LOGO */}
         <Link
           href="/"
           onClick={(e) => {
-            // Limpiamos el hash manualmente y disparamos el evento
             setActiveHash("");
             window.history.replaceState(null, "", "/");
             window.dispatchEvent(new Event("hashchange"));
           }}
           className="flex items-center gap-2 group flex-shrink-0"
         >
-          <span className="text-sm md:text-base font-black tracking-tighter uppercase text-foreground transition-colors group-hover:text-[#E61C8C]">NHM</span>
-          <span className="h-2 w-2 rounded-full bg-[#FF5C33] shadow-[0_0_10px_rgba(255,92,51,0.5)] transition-transform duration-300 group-hover:scale-110" />
+          <span className="text-sm md:text-base font-black tracking-tighter uppercase text-foreground transition-colors group-hover:text-brand-fucsia">NHM</span>
+          <span className="h-2 w-2 rounded-full bg-brand-naranja shadow-[0_0_10px_var(--color-brand-naranja)] transition-transform duration-300 group-hover:scale-120" />
         </Link>
 
         {/* ENLACES */}
-        <div className="flex gap-8 md:gap-12">
+        <div className="flex gap-6 md:gap-10">
           {links.map((link) => {
             const isActive = activeHash === link.hash;
             return (
@@ -57,7 +58,6 @@ export default function Navbar() {
                 key={link.name}
                 href={link.href}
                 onClick={(e) => {
-                  // AQUÍ ESTÁ LA MAGIA: Forzamos a que el navegador se entere del cambio
                   if (link.hash) {
                     window.location.hash = link.hash;
                     window.dispatchEvent(new Event("hashchange"));
@@ -76,7 +76,7 @@ export default function Navbar() {
                 {isActive && (
                   <motion.div
                     layoutId="nav-underline"
-                    className="absolute -bottom-1 left-0 w-full h-[2px] bg-gradient-to-r from-[#E61C8C] to-[#FF5C33]"
+                    className="absolute -bottom-1 left-0 w-full h-[2px] bg-gradient-to-r from-brand-fucsia to-brand-naranja"
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 )}
@@ -85,6 +85,6 @@ export default function Navbar() {
           })}
         </div>
       </div>
-    </nav>
+    </header>
   );
 }

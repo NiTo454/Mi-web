@@ -1,5 +1,15 @@
 @import "tailwindcss";
 
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-accent: var(--accent);
+  --color-brand-fucsia: var(--brand-fucsia);
+  --color-brand-violeta: var(--brand-violeta);
+  --color-brand-naranja: var(--brand-naranja);
+  --color-brand-negro: var(--brand-negro);
+}
+
 @layer base {
   :root {
     --background: #ffffff;

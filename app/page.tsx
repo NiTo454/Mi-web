@@ -3,8 +3,15 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
 import ProjectsSection from "@/components/ProjectsSection";
 import AboutSection from "@/components/AboutSection";
+import InteractiveParticles from "@/components/InteractiveParticles";
+import IntroLoader from "@/components/IntroLoader";
+import MouseGlow from "@/components/MouseGlow";
+import Compromiso from "@/components/compromiso";
 
 export default function Home() {
+  // --- ESTADO PARA CONTROLAR EL LOADER ---
+  const [loading, setLoading] = useState(true);
+
   // --- ESTADO PARA CONTROLAR LOS ACORDEONES ---
   const [activeSection, setActiveSection] = useState<'none' | 'sobre-mi' | 'proyectos'>('none');
 
@@ -49,9 +56,18 @@ export default function Home() {
   const fadeInUp: Variants = { hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } };
 
   return (
-    <section className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden bg-background px-6 pt-32 pb-20 transition-colors duration-500">
+    <>
+      <IntroLoader onComplete={() => setLoading(false)} />
+      {!loading && (
+        <section className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden bg-transparent px-6 pt-32 pb-20 transition-colors duration-500">
 
-      {/* FONDO DINÁMICO (Paleta Syntaxis Lab) */}
+          {/* PARTÍCULAS INTERACTIVAS */}
+          <InteractiveParticles />
+
+          {/* SPOTLIGHT GLOW DEL MOUSE */}
+          <MouseGlow />
+
+          {/* FONDO DINÁMICO (Paleta Syntaxis Lab) */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[#E61C8C]/10 blur-[120px] transition-colors duration-700" />
         <div className="absolute bottom-[-10%] right-[0%] w-[50%] h-[50%] rounded-full bg-[#A3249E]/10 blur-[120px] transition-colors duration-700" />
@@ -128,13 +144,18 @@ export default function Home() {
           )}
 
           {activeSection === 'sobre-mi' && (
-            <motion.div key="sobre-mi" initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.5, ease: "easeInOut" }} className="overflow-hidden w-full mt-20">
+            <motion.div ref={aboutRef} key="sobre-mi" initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.5, ease: "easeInOut" }} className="overflow-hidden w-full mt-20">
               <AboutSection />
             </motion.div>
           )}
         </AnimatePresence>
 
       </motion.div>
+
+      {/* SECCIÓN DE COMPROMISO */}
+      <div className="w-full max-w-7xl relative z-10">
+        <Compromiso />
+      </div>
 
       <div className="absolute right-10 top-1/2 -translate-y-1/2 hidden lg:block uppercase [writing-mode:vertical-rl] text-foreground/20 tracking-[1em] text-[10px] font-bold">
         Software Developer — 2026
@@ -149,6 +170,8 @@ export default function Home() {
           100% { transform: translateX(100%); }
         }
       `}} />
-    </section>
+        </section>
+      )}
+    </>
   );
 }
