@@ -8,15 +8,19 @@
   --color-brand-violeta: var(--brand-violeta);
   --color-brand-naranja: var(--brand-naranja);
   --color-brand-negro: var(--brand-negro);
+  --color-card-bg: var(--card-bg);
+  --color-card-border: var(--card-border);
 }
 
 @layer base {
   :root {
-    --background: #ffffff;
-    --foreground: #000000; /* Negro Profundo */
+    --background: #f8f9fa;
+    --foreground: #09090b; /* Negro Profundo */
     --accent: #E61C8C; /* Fucsia Vibrante */
+    --card-bg: #ffffff;
+    --card-border: rgba(0, 0, 0, 0.07);
 
-    /* Paleta Oficial Syntaxis Lab */
+    /* Paleta Oficial Sintaxis Lab */
     --brand-fucsia: #E61C8C;
     --brand-violeta: #A3249E;
     --brand-naranja: #FF5C33;
@@ -25,9 +29,11 @@
 
   /* Usamos .dark para compatibilidad con Next-Themes o selectores estándar */
   .dark {
-    --background: #000000; /* Negro Profundo */
-    --foreground: #ffffff;
+    --background: #030303; /* Negro Profundo */
+    --foreground: #f4f4f5;
     --accent: #FF5C33; /* Naranja Coral en modo oscuro */
+    --card-bg: rgba(255, 255, 255, 0.015);
+    --card-border: rgba(255, 255, 255, 0.07);
   }
 
   body {
@@ -69,6 +75,59 @@
     background-image: url("https://grainy-gradients.vercel.app/noise.svg");
     filter: contrast(120%) brightness(100%);
   }
+
+  /* Cuadrícula de Fondo Futurista */
+  .bg-grid {
+    background-image: 
+      linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+    background-size: 32px 32px;
+    mask-image: radial-gradient(ellipse at 50% 50%, black 50%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse at 50% 50%, black 50%, transparent 100%);
+  }
+
+  .dark .bg-grid {
+    background-image: 
+      linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  }
+
+  /* Spotlight Card Border Effect */
+  .spotlight-card {
+    position: relative;
+    background-clip: padding-box;
+  }
+
+  .spotlight-card::before {
+    content: "";
+    position: absolute;
+    inset: -1px; /* Cubre exactamente el borde */
+    border-radius: inherit;
+    padding: 1px; /* Grosor del borde */
+    background: radial-gradient(
+      350px circle at var(--mouse-x, -1000px) var(--mouse-y, -1000px),
+      rgba(230, 28, 140, 0.3), /* Fucsia */
+      rgba(255, 92, 51, 0.2) 40%, /* Naranja */
+      transparent 80%
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .spotlight-card:hover::before {
+    opacity: 1;
+  }
+
+  /* 3D Tilt Card effect */
+  .tilt-card {
+    transition: transform 0.3s cubic-bezier(0.2, 0.6, 0.2, 1);
+    transform: perspective(1000px) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg));
+  }
 }
 
 @keyframes shimmer {
@@ -90,3 +149,25 @@
   from { opacity: 0; filter: blur(4px); }
   to { opacity: 1; filter: blur(0); }
 }
+
+/* OVERRIDES PARA VIEW TRANSITIONS API (Efecto Ripple Líquido) */
+html {
+  background-color: var(--background);
+  transition: background-color 0.5s ease;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-new(root) {
+  z-index: 9999 !important;
+}
+
+::view-transition-old(root) {
+  z-index: 1 !important;
+}
+
+

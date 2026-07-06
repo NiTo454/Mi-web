@@ -1,6 +1,6 @@
 "use client";
-import { ReactNode } from "react";
-import { motion, type Variants } from "framer-motion";
+import { ReactNode, useState } from "react";
+import { motion, AnimatePresence, type Variants } from "framer-motion";
 import Link from "next/link";
 
 type Area = {
@@ -14,10 +14,11 @@ type Area = {
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.15 } }
+  visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
 };
+
 const fadeInUp: Variants = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0 }
 };
 
@@ -37,8 +38,6 @@ const BackendIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-60 group-hover:opacity-100 group-hover:text-[#A3249E] transition-all duration-300" aria-hidden="true"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></svg>
 );
 
-// --- DATOS ---
-// --- DATOS ---
 const areas: Area[] = [
   {
     title: "Apps Móviles",
@@ -73,6 +72,7 @@ type Project = {
   tech: string[];
   github?: string;
   demo?: string;
+  category: "mobile" | "web";
 };
 
 const realProjects: Project[] = [
@@ -82,6 +82,7 @@ const realProjects: Project[] = [
     desc: "Aplicación móvil multiplataforma de salud. Cuenta con agendamiento de citas en tiempo real, chat integrado médico-paciente y visualización de expedientes médicos.",
     tech: ["Flutter", "Dart", "Firebase", "Push Notifications"],
     github: "https://github.com/NiTo454",
+    category: "mobile"
   },
   {
     title: "Plataforma Escolar con Asistencia QR",
@@ -89,6 +90,7 @@ const realProjects: Project[] = [
     desc: "Sistema académico web con control de asistencia mediante códigos QR dinámicos auto-actualizables para evitar fraudes, panel de administración docente y control escolar.",
     tech: ["Next.js", "Node.js", "MySQL", "Tailwind CSS"],
     github: "https://github.com/NiTo454",
+    category: "web"
   },
   {
     title: "Sitio Corporativo con Simulaciones 3D",
@@ -96,10 +98,26 @@ const realProjects: Project[] = [
     desc: "Desarrollo de landing page interactiva corporativa, implementando simulaciones de partículas 3D aceleradas por hardware y layouts responsivos de alta fidelidad.",
     tech: ["Next.js", "React Three Fiber", "Three.js", "Framer Motion"],
     demo: "https://sintaxis-lab-xuse.vercel.app",
+    category: "web"
   }
 ];
 
 export default function ProjectsSection() {
+  const [filter, setFilter] = useState<"all" | "mobile" | "web">("all");
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement | HTMLAnchorElement>) => {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    card.style.setProperty("--mouse-x", `${x}px`);
+    card.style.setProperty("--mouse-y", `${y}px`);
+  };
+
+  const filteredProjects = realProjects.filter(
+    (p) => filter === "all" || p.category === filter
+  );
+
   return (
     <motion.div variants={containerVariants} initial="hidden" animate="visible" className="pt-12 pb-16 border-t border-foreground/10 flex flex-col gap-16">
       
@@ -116,7 +134,8 @@ export default function ProjectsSection() {
             <motion.div key={area.title} variants={fadeInUp} className="h-full">
               <Link
                 href={area.link}
-                className="group relative flex flex-col justify-between h-full bg-background/30 dark:bg-foreground/[0.01] backdrop-blur-md border border-foreground/10 hover:border-brand-fucsia/30 hover:bg-background/50 dark:hover:bg-foreground/[0.03] p-8 md:p-10 rounded-[2.5rem] hover:-translate-y-2 transition-all duration-500 shadow-md hover:shadow-[0_20px_50px_-12px_rgba(230,28,140,0.15)] overflow-hidden"
+                onMouseMove={handleMouseMove}
+                className="spotlight-card group relative flex flex-col justify-between h-full bg-card-bg backdrop-blur-md border border-card-border hover:border-brand-fucsia/30 hover:bg-card-bg/90 p-6 sm:p-8 md:p-10 rounded-[2.5rem] hover:-translate-y-2 transition-all duration-500 shadow-md hover:shadow-[0_20px_50px_-12px_rgba(230,28,140,0.15)] overflow-hidden"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-brand-fucsia/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
@@ -148,73 +167,165 @@ export default function ProjectsSection() {
 
       {/* GALERÍA DE PROYECTOS REALES */}
       <div className="pt-12 border-t border-foreground/5">
-        <div className="mb-12">
-          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-naranja">Portafolio</span>
-          <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-foreground uppercase mt-2">
-            PROYECTOS <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-fucsia to-brand-violeta">DESTACADOS.</span>
-          </h2>
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
+          <div>
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-naranja">Portafolio</span>
+            <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-foreground uppercase mt-2">
+              PROYECTOS <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-fucsia to-brand-violeta">DESTACADOS.</span>
+            </h2>
+          </div>
+
+          {/* FILTROS DE CATEGORÍA */}
+          <div className="flex flex-wrap gap-2 bg-foreground/5 dark:bg-foreground/[0.02] p-1.5 rounded-full border border-foreground/10 w-fit">
+            {(["all", "mobile", "web"] as const).map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setFilter(cat)}
+                className={`relative px-6 py-2.5 rounded-full font-bold text-[10px] uppercase tracking-wider transition-all duration-300 outline-none cursor-pointer ${
+                  filter === cat
+                    ? "text-background dark:text-foreground"
+                    : "text-foreground/60 hover:text-foreground"
+                }`}
+              >
+                {filter === cat && (
+                  <motion.div
+                    layoutId="active-filter-bg"
+                    className="absolute inset-0 bg-foreground dark:bg-white/10 rounded-full -z-10"
+                    transition={{ type: "spring", stiffness: 350, damping: 25 }}
+                  />
+                )}
+                {cat === "all" ? "Todos" : cat === "mobile" ? "Móvil" : "Web & Sistemas"}
+              </button>
+            ))}
+          </div>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {realProjects.map((project) => (
-            <motion.div
-              key={project.title}
-              variants={fadeInUp}
-              className="group relative bg-background/25 dark:bg-foreground/[0.005] backdrop-blur-md border border-foreground/10 hover:border-brand-violeta/30 hover:bg-background/40 dark:hover:bg-foreground/[0.02] p-8 md:p-10 rounded-[2.5rem] transition-all duration-500 shadow-sm hover:shadow-[0_20px_50px_-12px_rgba(163,36,158,0.15)] flex flex-col justify-between overflow-hidden"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-brand-violeta/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+        <motion.div layout className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <AnimatePresence mode="popLayout">
+            {filteredProjects.map((project) => (
+              <motion.div
+                layout
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.4 }}
+                key={project.title}
+                onMouseMove={handleMouseMove}
+                className="spotlight-card group relative bg-card-bg backdrop-blur-md border border-card-border hover:border-brand-violeta/30 hover:bg-card-bg/85 p-5 sm:p-6 md:p-8 rounded-[2.5rem] transition-all duration-500 shadow-sm hover:shadow-[0_20px_50px_-12px_rgba(163,36,158,0.15)] flex flex-col justify-between overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-brand-violeta/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
-              <div className="relative z-10">
-                <div className="flex justify-between items-start mb-6">
-                  <div className="flex flex-col gap-1">
-                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-brand-fucsia">{project.role}</span>
-                    <h3 className="text-2xl md:text-3xl font-black tracking-tight text-foreground mt-1">{project.title}</h3>
+                <div className="relative z-10">
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[9px] font-black uppercase tracking-[0.2em] text-brand-fucsia">{project.role}</span>
+                      <h3 className="text-2xl md:text-3xl font-black tracking-tight text-foreground mt-1">{project.title}</h3>
+                    </div>
+
+                    <div className="flex gap-2">
+                      {project.github && (
+                        <a
+                          href={project.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-10 h-10 rounded-full border border-foreground/10 flex items-center justify-center hover:bg-foreground hover:text-background transition-colors duration-300 text-foreground"
+                          title="Ver Código en GitHub"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"/>
+                          </svg>
+                        </a>
+                      )}
+                      {project.demo && (
+                        <a
+                          href={project.demo}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-10 h-10 rounded-full border border-foreground/10 flex items-center justify-center hover:bg-brand-fucsia hover:border-brand-fucsia hover:text-white transition-all duration-300 text-foreground"
+                          title="Ver Sitio Web"
+                        >
+                          ↗
+                        </a>
+                      )}
+                    </div>
                   </div>
 
-                  <div className="flex gap-2">
-                    {project.github && (
-                      <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-10 h-10 rounded-full border border-foreground/10 flex items-center justify-center hover:bg-foreground hover:text-background transition-colors duration-300 text-foreground"
-                        title="Ver Código en GitHub"
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"/>
-                        </svg>
-                      </a>
-                    )}
-                    {project.demo && (
-                      <a
-                        href={project.demo}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-10 h-10 rounded-full border border-foreground/10 flex items-center justify-center hover:bg-brand-fucsia hover:border-brand-fucsia hover:text-white transition-all duration-300 text-foreground"
-                        title="Ver Sitio Web"
-                      >
-                        ↗
-                      </a>
-                    )}
+                  {/* IDE-like Simulated Code Block for geek aesthetic */}
+                  <div className="w-full border border-foreground/10 rounded-2xl overflow-hidden mb-6 bg-black/60 backdrop-blur-sm shadow-inner">
+                    <div className="flex items-center justify-between px-4 py-2 border-b border-foreground/10 bg-foreground/[0.02] text-[9px] font-mono text-foreground/40">
+                      <div className="flex gap-1.5">
+                        <span className="w-2 h-2 rounded-full bg-red-500/60" />
+                        <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/60" />
+                        <span className="w-2.5 h-2.5 rounded-full bg-green-500/60" />
+                      </div>
+                      <span className="opacity-80 font-bold">{project.category === "mobile" ? "main.dart" : "app.tsx"}</span>
+                      <span className="w-6" />
+                    </div>
+                    <div className="p-4 font-mono text-[9px] leading-relaxed text-foreground/60 overflow-hidden max-h-[85px] relative">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
+                      {project.category === "mobile" ? (
+                        <pre className="text-left text-[#54C5F8] opacity-75">
+                          <code>{`import 'package:flutter/material.dart';
+
+void main() => runApp(ClinicaApp());
+
+class ClinicaApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Salud Conectada',
+      theme: ThemeData.dark(),
+      home: DoctorDashboard(),
+    );
+  }
+}`}</code>
+                        </pre>
+                      ) : project.title.includes("QR") ? (
+                        <pre className="text-left text-[#FF5C33] opacity-75">
+                          <code>{`import QRCode from 'qrcode';
+
+export async function generateSecureQR(studentId: string) {
+  const dynamicHash = sha256(studentId + Date.now());
+  const qrCodeUrl = await QRCode.toDataURL(dynamicHash);
+  return { qrCodeUrl, timestamp: Date.now() };
+}`}</code>
+                        </pre>
+                      ) : (
+                        <pre className="text-left text-[#E61C8C] opacity-75">
+                          <code>{`import { Canvas } from '@react-three/fiber';
+import { OrbitControls } from '@react-three/drei';
+
+export default function Scene() {
+  return (
+    <Canvas camera={{ position: [0, 0, 10], fov: 60 }}>
+      <ambientLight intensity={0.4} />
+      <HardwareParticles count={8000} />
+      <OrbitControls enableZoom={false} />
+    </Canvas>
+  );
+}`}</code>
+                        </pre>
+                      )}
+                    </div>
                   </div>
+
+                  <p className="text-foreground/60 text-sm leading-relaxed mb-6">{project.desc}</p>
                 </div>
 
-                <p className="text-foreground/60 text-sm leading-relaxed mb-8">{project.desc}</p>
-              </div>
-
-              <div className="relative z-10 flex flex-wrap gap-1.5 mt-auto">
-                {project.tech.map((t) => (
-                  <span
-                    key={t}
-                    className="text-[9px] font-bold uppercase tracking-widest px-3 py-1.5 bg-background/50 dark:bg-foreground/5 text-foreground/60 rounded-lg border border-foreground/5"
-                  >
-                    {t}
-                  </span>
-                ))}
-              </div>
-            </motion.div>
-          ))}
-        </div>
+                <div className="relative z-10 flex flex-wrap gap-1.5 mt-auto">
+                  {project.tech.map((t) => (
+                    <span
+                      key={t}
+                      className="text-[9px] font-bold uppercase tracking-widest px-3 py-1.5 bg-background/50 dark:bg-foreground/5 text-foreground/60 rounded-lg border border-foreground/5"
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
       </div>
 
     </motion.div>

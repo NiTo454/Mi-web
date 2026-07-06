@@ -308,7 +308,7 @@ export default function Footer() {
               rel="noopener noreferrer"
               className="hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-[#E61C8C] hover:to-[#FF5C33] transition-all duration-300"
             >
-              Syntaxis Lab
+              Sintaxis Lab
             </a>
             {/* Clic aquí también abre el panel */}
             <button onClick={() => setIsContactOpen(!isContactOpen)} className="hover:text-[#E61C8C] transition-colors duration-300 uppercase outline-none">Contacto</button>
@@ -326,7 +326,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="font-bold text-foreground/60 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-[#E61C8C] hover:to-[#FF5C33] transition-all duration-300"
               >
-                Syntaxis Lab
+                Sintaxis Lab
               </a>
             </p>
           </div>

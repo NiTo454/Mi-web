@@ -14,7 +14,7 @@ const logs = [
   "> React 19.2.3, Next.js 16.1.6, Tailwind CSS v4... [OK]",
   "> Establishing secure connection to Tizayuca, MX...",
   "> Connection status... [ONLINE]",
-  "> Launching Syntaxis Lab environment...",
+  "> Launching Sintaxis Lab environment...",
   "> Portfolio loaded successfully. Welcome.",
 ];
 
